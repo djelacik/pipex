@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 14:04:42 by djelacik          #+#    #+#             */
-/*   Updated: 2024/06/12 08:55:30 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/06/12 09:05:41 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	main(int argc, char **argv)
 	if (create_pipe(pipe_fd) < 0)
 		error_msg("Failed to create pipe\n");
 	input_fd = open(argv[1], O_RDONLY);
-	output_fd = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	output_fd = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644); //Not sure for rights
 	if (input_fd == -1 || output_fd == -1)
 	{
 		if (input_fd != -1)
@@ -41,9 +41,9 @@ int	main(int argc, char **argv)
 	return (EXIT_SUCCESS);
 }
 
-int	create_pipe(int *pipefd)
+int	create_pipe(int *pipe_fd)
 {
-	if (pipe(pipefd) == -1)
+	if (pipe(pipe_fd) == -1)
 		return (-1);
 	return (0);
 }
