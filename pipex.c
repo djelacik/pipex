@@ -6,57 +6,58 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 14:04:42 by djelacik          #+#    #+#             */
-/*   Updated: 2024/06/10 17:28:03 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/06/12 08:55:30 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
-	int pipefd[2];
+	int	pipe_fd[2];
+	int	input_fd;
+	int	output_fd;
 
 	if (argc != 5)
+		error_msg("Error: wrong number of arguments\n");
+	if (create_pipe(pipe_fd) < 0)
+		error_msg("Failed to create pipe\n");
+	input_fd = open(argv[1], O_RDONLY);
+	output_fd = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (input_fd == -1 || output_fd == -1)
 	{
-		write(2, "Error: wrong number of arguments\n", 33);
-		exit(EXIT_FAILURE);
+		if (input_fd != -1)
+			close(input_fd);
+		if (output_fd != -1)
+			close(output_fd);
+		//error_msg("Failed to open file\n");
 	}
-	if (create_pipe(pipefd) < 0)
-		error_msg("Failed to create pipe");
-	setup_and_execute(argv[2], open(argv[1], O_RDONLY), pipefd[1]);
-	close(pipefd[1]);
-	setup_and_execute(argv[3], pipefd[0], open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644));
-	close(pipefd[0]);
+	setup_and_execute(argv[2], input_fd, pipe_fd[1]);
+	close(pipe_fd[1]);
+	setup_and_execute(argv[3], pipe_fd[0], output_fd);
+	close(pipe_fd[0]);
 	wait(NULL);
 	wait(NULL);
 	return (EXIT_SUCCESS);
 }
 
-int create_pipe(int *pipefd)
+int	create_pipe(int *pipefd)
 {
 	if (pipe(pipefd) == -1)
 		return (-1);
 	return (0);
 }
 
-void setup_and_execute(char *cmd, int in_fd, int out_fd)
+void	setup_and_execute(char *cmd, int in_fd, int out_fd)
 {
-	if (in_fd == -1 || out_fd == -1)
-		error_msg("File opening failed\n");
-	pid_t pid = fork();
+	pid_t	pid;
+
+	pid = fork();
 	if (pid == 0)
 	{
-		if (in_fd != STDIN_FILENO)
-		{
-			dup2(in_fd, STDIN_FILENO);
-			close(in_fd);
-		}
-		if (out_fd != STDOUT_FILENO)
-		{
-			dup2(out_fd, STDOUT_FILENO);
-			close(out_fd);
-		}
-		execute_command(cmd, STDIN_FILENO, STDOUT_FILENO);
+		redirect_input(in_fd, out_fd);
+		execute_command(cmd);
+		exit(EXIT_SUCCESS);
 	}
 	else if (pid < 0)
 	{
@@ -64,17 +65,40 @@ void setup_and_execute(char *cmd, int in_fd, int out_fd)
 	}
 }
 
-void execute_command(char *cmd, int in_fd, int out_fd)
+void	redirect_input(int in_fd, int out_fd)
 {
-	(void)in_fd;
-	(void)out_fd;
-	char *args[] = {"/bin/sh", "-c", cmd, NULL};
+	if (in_fd != STDIN_FILENO)
+	{
+		if (in_fd != -1)
+		{
+			dup2(in_fd, STDIN_FILENO);
+			close(in_fd);			
+		}
+		else
+			close(STDIN_FILENO);
+	}
+	if (out_fd != STDOUT_FILENO)
+	{
+		dup2(out_fd, STDOUT_FILENO);
+		close(out_fd);
+	}
+}
+
+void	execute_command(char *cmd)
+{
+	char	*args[4];
+
+	args[0] = "/bin/sh";
+	args[1] = "-c";
+	args[2] = cmd;
+	args[3] = NULL;
 	execve("/bin/sh", args, NULL);
 	error_msg("Execve failed");
 }
 
-void error_msg(const char *msg)
+void	error_msg(const char *msg)
 {
 	perror(msg);
-	exit(EXIT_FAILURE);
+	//exit(EXIT_FAILURE);
+	exit(EXIT_SUCCESS);
 }
