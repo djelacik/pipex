@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 15:25:47 by djelacik          #+#    #+#             */
-/*   Updated: 2024/06/12 09:03:38 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/06/14 13:21:03 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,20 @@
 # include <stdio.h>
 # include <fcntl.h>
 # include <sys/wait.h>
+
+typedef	struct s_pipex
+{
+	pid_t	pid;
+	int		pipe_fd[2];
+	int		in_file;
+	int		out_file;
+}t_pipex;
+
+# define ERR_INFILE "Infile"
+# define ERR_OUTFILE "Outfile"
+# define ERR_INPUT "Invalid number of arguments.\n"
+# define ERR_PIPE "Pipe"
+# define ERR_FORK "Fork"
 
 //Function protoypes
 
