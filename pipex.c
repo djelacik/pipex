@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 14:04:42 by djelacik          #+#    #+#             */
-/*   Updated: 2024/06/14 13:32:24 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/06/14 15:04:34 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,4 +163,32 @@ void	parent_process(char **argv, char **envp, t_pipex pipex)
 	dup2(pipex.out_file, STDIN_FILENO);
 	close(pipex.pipe_fd[1]);
 	//execve()
+}
+
+int	find_path(t_pipex pipex)
+{
+	int	i;
+	
+	i = 0;
+	while (ft_strcmp(pipex.envp[i], "PATH=") != 0)
+		i++;
+	pipex.paths = ft_split(pipex.envp[i] + 5, ":");
+	i = 0;
+	while (pipex.paths[i])
+	{
+		pipex.single_path = ft_strjoin(pipex.paths[i], "/");
+		pipex.full_path = ft_strjoin(pipex.single_path, pipex.cmd);
+		free(pipex.single_path);
+		if (access(pipex.full_path, X_OK) == 0)
+			return (EXIT_SUCCESS);
+		i++;
+	}
+	while (pipex.paths[i--])
+		free(pipex.paths[i]);
+	return (EXIT_FAILURE);
+}
+
+void	*execute_command(t_pipex pipex)
+{
+	
 }

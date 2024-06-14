@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 15:25:47 by djelacik          #+#    #+#             */
-/*   Updated: 2024/06/14 13:21:03 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/06/14 14:58:51 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,12 @@ typedef	struct s_pipex
 	int		pipe_fd[2];
 	int		in_file;
 	int		out_file;
+	char	*cmd;
+	char	*single_path;
+	char	*full_path;
+	char	**paths;
+	char	**argv;
+	char	**envp;
 }t_pipex;
 
 # define ERR_INFILE "Infile"
@@ -32,6 +38,7 @@ typedef	struct s_pipex
 # define ERR_INPUT "Invalid number of arguments.\n"
 # define ERR_PIPE "Pipe"
 # define ERR_FORK "Fork"
+# define ERR_CMD "Command"
 
 //Function protoypes
 

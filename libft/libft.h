@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:19:56 by djelacik          #+#    #+#             */
-/*   Updated: 2024/05/07 13:33:58 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/06/14 13:41:00 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ size_t		ft_strlen(const char *s);
 size_t		ft_strlcpy(char *dst, const char *src, size_t dstsize);
 size_t		ft_strlcat(char *dst, const char *src, size_t dstsize);
 int			ft_strncmp(const char *s1, const char *s2, size_t n);
+int			ft_strcmp(char *s1, char *s2);
 void		ft_striteri(char *s, void (*f)(unsigned int, char*));
 char		*ft_strdup(const char *s1);
 char		*ft_strchr(const char *s, int c);
