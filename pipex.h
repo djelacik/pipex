@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 15:25:47 by djelacik          #+#    #+#             */
-/*   Updated: 2024/06/15 17:39:25 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/06/17 10:20:48 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,15 +42,16 @@ typedef	struct s_pipex
 # define ERR_PIPE "Pipe"
 # define ERR_FORK "Fork"
 # define ERR_CMD "Command"
-# define ERR_EXECV "Execv"
+# define ERR_EXECVE "Execve"
 # define ERR_CHILD "Child"
 # define ERR_PARENT "Parent"
 # define ERR_PATH "Path"
 
-//Function protoypes
-void	child_process(char **argv, t_pipex pipex);
-void	parent_process(char **argv, t_pipex pipex);
-int		find_path(char *command, t_pipex pipex);
-void	execute_command(char *command, t_pipex pipex);
+//Function prototypes
+void	child_process(char **argv, t_pipex *pipex);
+void	parent_process(char **argv, t_pipex *pipex);
+char	*find_path(char *command, t_pipex *pipex);
+void	execute_command(char *command, t_pipex *pipex);
 void	error_msg(const char *msg);
+void	ft_free_strarray(char **array);
 #endif
