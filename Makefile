@@ -1,32 +1,56 @@
-SRCS = pipex.c #pipex_utils.c
-OBJS = ${SRCS:.c=.o}
-NAME = pipex
-LIBC = ar rcs
-CC = cc
-RM = rm -f
-CFLAGS = -Wall -Wextra -Werror -g
-LIBDIR = libft
-LIBFT = $(LIBDIR)/libft.a
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/06/18 11:59:53 by djelacik          #+#    #+#              #
+#    Updated: 2024/06/18 11:59:54 by djelacik         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
-all: ${NAME}
+CC			= cc
+CFLAGS		= -Wall -Wextra -Werror -g
 
-${NAME}: ${LIBFT} $(OBJS)
-	$(CC) $(CFLAGS) -I$(LIBDIR) $^ -o $@
+PROG		= pipex
+SOURCES		= pipex.c pipex_utils.c
+OBJECTS		= ${SOURCES:.c=.o}
+
+PROG_B		= pipex_bonus
+B_SOURCES	= pipex_bonus.c pipex_utils.c
+B_OBJECTS	= ${B_SOURCES:.c=.o}
 
 %.o: %.c
-	$(CC) $(CFLAGS) -I$(LIBDIR) -c $< -o $@
+	$(CC) $(CFLAGS) -I. -c $< -o $@
 
-${LIBFT}:
-	@make -C $(LIBDIR)
+all:		${PROG}
+
+${PROG}:	${OBJECTS}
+							@echo "\033[35m----Compiling lib----"
+							@make re -C ./libft
+							@$(CC) ${OBJECTS} -Llibft -lft -o ${PROG}
+							@echo "Pipex Compiled!\n"
+
+bonus:		${PROG_B}
+
+${PROG_B}:	${B_OBJECTS}
+							@echo "\033[36m----Compiling lib----"
+							@make re -C ./libft
+							@${CC} ${B_OBJECTS} -Llibft -lft -o ${PROG_B}
+							@echo "Pipex Bonus Compiled!\n"
 
 clean:
-	${RM} ${OBJS}
-	make -C $(LIBDIR) clean
-	rm -f .bonus
-fclean: clean
-	make -C $(LIBDIR) fclean
-	${RM} ${NAME}
+							@make clean -C ./libft
+							@rm -f ${OBJECTS} ${B_OBJECTS}
 
-re: fclean all
+fclean:		clean
+							@make fclean -C ./libft
+							@rm -f ${PROG} ${PROG_B}
+							@echo "Deleting EVERYTHING\n"
 
-.PHONY: all clean fclean re
+re:			fclean all
+
+re_bonus:	fclean bonus
+
+.PHONY: all clean fclean re bonus re_bonus
