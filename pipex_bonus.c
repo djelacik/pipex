@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 21:04:07 by djelacik          #+#    #+#             */
-/*   Updated: 2024/06/18 21:40:15 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/06/20 01:19:24 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,11 @@
 //#define dbg_printf (void)
 #define dbg_printf(...)
 #endif
+
+/* Standard file descriptors.  */
+#define	STDIN_FILENO	0	/* Standard input.  */
+#define	STDOUT_FILENO	1	/* Standard output.  */
+#define	STDERR_FILENO	2	/* Standard error output.  */
 
 int main(int argc, char **argv, char **envp)
 {
@@ -79,40 +84,19 @@ void	start_process(t_pipex *pipex)
 		}
 		i++;
 	}
-	close_all_pipes(pipex);
-	while (i > 0)
+	while (i > 0 + 2)
 	{
 		wait(NULL);
 		i--;
 	}
+	close_all_pipes(pipex);
 }
-
-void	child_write(int i, char *command, t_pipex *pipex)
-{
-	int	out_file;
-	
-	dbg_printf("Child write process: %d\n", getpid());
-	if ((out_file = open(pipex->argv[pipex->argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644) < 0))
-		error_msg(ERR_CHILD_WRITE);
-	dbg_printf("Opened outfile: %d\n", out_file);
-	dbg_printf("This is the last working line in the program\n");
-	close(pipex->pipes[i][1]);
-	dbg_printf("This line doesn't get printed\n");
-	dup2(pipex->pipes[i][0], STDIN_FILENO);
-	close(pipex->pipes[i][0]);
-	dup2(out_file, STDOUT_FILENO);
-	close(out_file);
-	dbg_printf("Executing command: %s in child_write\n", command);
-	execute_command(command, pipex);
-	error_msg(ERR_CMD);
-}
-
 void	child_read(int i, char *command, t_pipex *pipex)
 {
 	int	in_file;
 	
-	printf("Child read process: %d\n", getpid());
-	if ((in_file = open(pipex->argv[1], O_RDONLY) < 0))
+	//printf("Child read process: %d\n", getpid());
+	if ((in_file = open(pipex->argv[1], O_RDONLY)) < 0)
 		error_msg(ERR_INFILE);
 	dbg_printf("Opened infile: %d\n", in_file);
 	close(pipex->pipes[i][0]);
@@ -124,10 +108,9 @@ void	child_read(int i, char *command, t_pipex *pipex)
 	execute_command(command, pipex);
 	error_msg(ERR_CHILD_WRITE);
 }
-
 void	child_middle(int i, char *command, t_pipex *pipex)
 {
-	printf("Child middle process: %d\n", getpid());
+	//printf("Child middle process: %d\n", getpid());
 	close(pipex->pipes[i -1][1]);
 	dup2(pipex->pipes[i - 1][0], STDIN_FILENO);
 	close(pipex->pipes[i - 1][0]);
@@ -138,6 +121,27 @@ void	child_middle(int i, char *command, t_pipex *pipex)
 	execute_command(command, pipex);
 	error_msg(ERR_CHILD_MIDDLE);
 }
+
+void	child_write(int i, char *command, t_pipex *pipex)
+{
+	int	out_file;
+	
+	//dbg_printf("Child write process: %d\n", getpid());
+	if ((out_file = open(pipex->argv[pipex->argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644) < 0))
+		error_msg(ERR_CHILD_WRITE);
+	dbg_printf("Opened outfile: %d\n", out_file);
+	close(pipex->pipes[i][1]);
+	dup2(pipex->pipes[i][0], STDIN_FILENO);
+	close(pipex->pipes[i][0]);
+	dup2(out_file, STDOUT_FILENO);
+	close(out_file);
+	dbg_printf("Executing command: %s in child_write\n", command);
+	fprintf(stderr ,"Executing command: %s in child_write\n", command);
+	execute_command(command, pipex);
+	error_msg(ERR_CMD);
+}
+
+
 
 void	close_all_pipes(t_pipex *pipex)
 {
@@ -153,22 +157,44 @@ void	close_all_pipes(t_pipex *pipex)
 	}
 }
 
+
+// void	close_unused_pipes(int current, t_pipex *pipex)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	while (i < pipex->pipe_count)
+// 	{
+// 		if (i != current && pipex->pipes[i][0] > STDERR_FILENO)
+// 		{
+// 			close(pipex->pipes[i][0]);
+// 			dbg_printf("Closed unused pipe read end: [%d]\n", pipex->pipes[i][0]);
+// 		}
+// 		if (i != current - 1 && pipex->pipes[i][1] > STDERR_FILENO)
+// 		{
+// 			close(pipex->pipes[i][1]);
+// 			dbg_printf("Closed unused pipe write end: [%d]\n", pipex->pipes[i][1]);
+// 		}
+// 		i++;
+// 	}
+// }
+
 void	close_unused_pipes(int current, t_pipex *pipex)
 {
 	int	i;
-	
+
 	i = 0;
 	while (i < pipex->pipe_count)
 	{
-		if (i != current)
-		{
-			close(pipex->pipes[i][0]);
-			printf("Closed unused pipe read end: %d\n", pipex->pipes[i][0]);
-		}
-		if (i != current - 1)
+		if (i != current && pipex->pipes[i][1] > STDERR_FILENO)
 		{
 			close(pipex->pipes[i][1]);
-			printf("Closed unused pipe write end: %d\n", pipex->pipes[i][1]);
+			dbg_printf("Closed unused pipe write end: [%d]\n", pipex->pipes[i][1]);
+		}
+		if (i != current - 1 && pipex->pipes[i][0] > STDERR_FILENO)
+		{
+			close(pipex->pipes[i][0]);
+			dbg_printf("Closed unused pipe read end: [%d]\n", pipex->pipes[i][0]);
 		}
 		i++;
 	}
