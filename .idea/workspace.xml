@@ -21,7 +21,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9fe63ccf-ec12-414c-972c-a291bc484269" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/pipex" beforeDir="false" afterPath="$PROJECT_DIR$/pipex" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pipex_bonus" beforeDir="false" afterPath="$PROJECT_DIR$/pipex_bonus" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pipex_bonus.c" beforeDir="false" afterPath="$PROJECT_DIR$/pipex_bonus.c" afterDir="false" />
     </list>
@@ -160,7 +160,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1718458556380</updated>
-      <workItem from="1718458557650" duration="11133000" />
+      <workItem from="1718458557650" duration="12105000" />
     </task>
     <servers />
   </component>
@@ -177,12 +177,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/pipex_bonus.c</url>
-          <line>79</line>
+          <line>89</line>
           <option name="timeStamp" value="15" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/pipex_bonus.c</url>
-          <line>68</line>
+          <line>78</line>
           <option name="timeStamp" value="20" />
         </line-breakpoint>
       </breakpoints>
