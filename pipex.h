@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 15:25:47 by djelacik          #+#    #+#             */
-/*   Updated: 2024/06/18 15:12:10 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/06/25 16:32:15 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <fcntl.h>
 # include <sys/wait.h>
 # include "libft/libft.h"
+# include "get_next_line/get_next_line.h"
 
 typedef	struct s_pipex
 {
@@ -30,6 +31,7 @@ typedef	struct s_pipex
 	int		out_file;
 	int		pipe_fd[2];
 	int		**pipes;
+	int		here_doc;
 	/*~~~path vars~~~*/
 	char	**paths;
 	char	**cmds;
@@ -38,6 +40,14 @@ typedef	struct s_pipex
 	char	**argv;
 	char	**envp;
 }t_pipex;
+
+//#define DBG_PRINT_FD
+
+#ifdef DBG_PRINT_FD
+#define dbg_printf(...) fprintf(stderr, __VA_ARGS__)
+#else
+#define dbg_printf(...)
+#endif
 
 # define ERR_INFILE "Infile"
 # define ERR_OUTFILE "Outfile"
@@ -65,10 +75,11 @@ void	ft_free_strarray(char **array);
 
 //Bonus Function prototypes
 void	create_pipes(t_pipex *pipex);
-void	start_process(t_pipex *pipex);
-void	child_write(int i, char *command, t_pipex *pipex);
-void	child_read(int i, char *command, t_pipex *pipex);
-void	child_middle(int i, char *command, t_pipex *pipex);
 void	close_unused_pipes(int current, t_pipex *pipex);
 void	close_all_pipes(t_pipex *pipex);
+void	start_process(t_pipex *pipex);
+void	child_read(int i, char *command, t_pipex *pipex);
+void	child_middle(int i, char *command, t_pipex *pipex);
+void	child_write(int i, char *command, t_pipex *pipex);
+void	here_doc(char *limiter, t_pipex *pipex);
 #endif

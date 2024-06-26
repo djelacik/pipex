@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 21:29:04 by djelacik          #+#    #+#             */
-/*   Updated: 2024/06/18 12:06:54 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/06/25 16:58:58 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ char	*find_path(char *command, t_pipex *pipex)
 		i++;
     if (pipex->envp[i] == NULL)
 	{
-        error_msg(ERR_PATH);
+        perror(ERR_PATH);
+		exit(127);
 		return (NULL);
 	}
 	pipex->paths = ft_split(pipex->envp[i] + 5, ':');
@@ -50,10 +51,13 @@ void	execute_command(char *command, t_pipex *pipex)
 	commands = ft_split(command, ' ');
 	full_path = find_path(commands[0], pipex);
 	if (full_path == NULL)
-		error_msg(ERR_CMD);
+	{
+		perror(ERR_CMD);
+		exit(126);
+	}
 	execve(full_path, commands, pipex->envp);
-	error_msg(ERR_EXECVE);
 	ft_free_strarray(commands);
+	error_msg(ERR_EXECVE);
 }
 
 void	error_msg(const char *msg)
