@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 15:25:47 by djelacik          #+#    #+#             */
-/*   Updated: 2024/06/25 16:32:15 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/07/02 14:47:34 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,12 @@ typedef	struct s_pipex
 	char	**envp;
 }t_pipex;
 
-//#define DBG_PRINT_FD
+#define DBG_PRINT_FD
 
 #ifdef DBG_PRINT_FD
 #define dbg_printf(...) fprintf(stderr, __VA_ARGS__)
 #else
-#define dbg_printf(...)
+//define dbg_printf(...)
 #endif
 
 # define ERR_INFILE "Infile"

@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 21:04:07 by djelacik          #+#    #+#             */
-/*   Updated: 2024/06/25 16:48:28 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/07/02 15:12:24 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ int main(int argc, char **argv, char **envp)
 		pipex.in_file = open(pipex.argv[1], O_RDONLY);	
 		if (pipex.in_file < 0)
 		{
-			perror("");
-			exit(EXIT_SUCCESS);
+			perror("Infile doesn't work");
+			//exit(EXIT_SUCCESS);
 		}
 	}
 	pipex.out_file = 0;
@@ -114,7 +114,11 @@ void	child_read(int i, char *command, t_pipex *pipex)
 	// if ((in_file = open(pipex->argv[1], O_RDONLY)) < 0)
 	// 	error_msg(ERR_INFILE);
 	//dbg_printf("Opened infile: %d\n", in_file);
-	dup2(pipex->in_file, STDIN_FILENO);
+	if (dup2(pipex->in_file, STDIN_FILENO) < 0)
+	{
+		perror("dup2 failed");
+		exit(EXIT_FAILURE);
+	}
 	dbg_printf("Dup2(%d, %d)\n", pipex->in_file, STDIN_FILENO);
 	dup2(pipex->pipes[i][1], STDOUT_FILENO);
 	dbg_printf("Dup2(%d, %d)\n", pipex->pipes[i][1], STDOUT_FILENO);
