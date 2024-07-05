@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 21:04:07 by djelacik          #+#    #+#             */
-/*   Updated: 2024/07/02 15:12:24 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/07/05 16:20:54 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,34 @@ int main(int argc, char **argv, char **envp)
 		error_msg(ERR_OUTFILE);
 	dbg_printf("Opened outfile: %d\n", pipex.out_file);
 	start_process(&pipex);
+	free(pipex.pipes);
+	dbg_printf("Hello");
 	return(EXIT_FAILURE);
+}
+
+int	ft_waitpid(pid_t pid)
+{
+	int	status;
+
+	status = 0;
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	return (EXIT_FAILURE);
+}
+
+int	wait_children(t_pipex *pipex)
+{
+	int	i;
+	int	exit;
+
+	i = 0;
+	while(i < pipex->argc - 3)
+	{
+		exit = ft_waitpid(pipex->pid[i]);
+		i++;
+	}
+	return (exit);
 }
 
 void	here_doc(char *limiter, t_pipex *pipex)
@@ -82,9 +109,10 @@ void	start_process(t_pipex *pipex)
 	int	i;
 
 	i = 0;
+	pipex->pid = malloc(sizeof(pid_t) * pipex->argc - 3);
 	while (i < pipex->argc - 3)
 	{
-		if ((pipex->pid = fork()) < 0)
+		if ((pipex->pid[i] = fork()) < 0)
 			error_msg(ERR_FORK);
 		if (pipex->pid == 0)
 		{
@@ -100,20 +128,11 @@ void	start_process(t_pipex *pipex)
 		i++;
 	}
 	close_all_pipes(pipex);
-	while (i > 0)
-	{
-		wait(NULL);
-		i--;
-	}
+	exit(wait_children(pipex));
 }
+
 void	child_read(int i, char *command, t_pipex *pipex)
 {
-	//int	in_file;
-	
-	//printf("Child read process: %d\n", getpid());
-	// if ((in_file = open(pipex->argv[1], O_RDONLY)) < 0)
-	// 	error_msg(ERR_INFILE);
-	//dbg_printf("Opened infile: %d\n", in_file);
 	if (dup2(pipex->in_file, STDIN_FILENO) < 0)
 	{
 		perror("dup2 failed");
@@ -130,9 +149,9 @@ void	child_read(int i, char *command, t_pipex *pipex)
 	execute_command(command, pipex);
 	error_msg(ERR_CHILD_WRITE);
 }
+
 void	child_middle(int i, char *command, t_pipex *pipex)
 {
-	//printf("Child middle process: %d\n", getpid());
 	close(pipex->pipes[i - 1][1]);
 	dup2(pipex->pipes[i - 1][0], STDIN_FILENO);
 	dbg_printf("Dup2(%d, %d)\n", pipex->pipes[i - 1][0], STDIN_FILENO);
@@ -148,12 +167,6 @@ void	child_middle(int i, char *command, t_pipex *pipex)
 
 void	child_write(int i, char *command, t_pipex *pipex)
 {
-	//int	out_file;
-	
-	//dbg_printf("Child write process: %d\n", getpid());
-	// if ((out_file = open(pipex->argv[pipex->argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644) < 0))
-	// 	error_msg(ERR_CHILD_WRITE);
-	//dbg_printf("Opened outfile: %d\n", out_file);
 	close(pipex->pipes[i - 1][1]);
 	dup2(pipex->pipes[i - 1][0], STDIN_FILENO);
 	dbg_printf("Dup2(%d, %d)\n", pipex->pipes[i - 1][0], STDIN_FILENO);
@@ -162,8 +175,6 @@ void	child_write(int i, char *command, t_pipex *pipex)
 	dbg_printf("Dup2(%d, %d)\n", pipex->out_file, STDOUT_FILENO);
 	close(pipex->out_file);
 	dbg_printf("Outfile closed\n");
-	//close(pipex->pipes[i][1]);
-	//close(pipex->pipes[i][0]);
 	dbg_printf("Executing command: %s in child_write\n", command);
 	execute_command(command, pipex);
 	error_msg(ERR_CHILD_WRITE);

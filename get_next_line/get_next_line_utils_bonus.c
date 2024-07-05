@@ -6,13 +6,13 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 15:19:21 by djelacik          #+#    #+#             */
-/*   Updated: 2024/05/22 15:50:09 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/07/04 13:51:27 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
 
-size_t	ft_strlen(const char *s)
+size_t	ft_strlen2(const char *s)
 {
 	size_t	i;
 
@@ -24,7 +24,7 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-char	*ft_strchr(const char *s, int c)
+char	*ft_strchr2(const char *s, int c)
 {
 	while (*s != (char)c)
 		if (!*s++)
@@ -32,7 +32,7 @@ char	*ft_strchr(const char *s, int c)
 	return ((char *)s);
 }
 
-void	*ft_calloc(size_t count, size_t size)
+void	*ft_calloc2(size_t count, size_t size)
 {
 	void	*buffer;
 	size_t	total;
@@ -62,10 +62,10 @@ char	*ft_strjoin_free(char *buffer, char const *temp_buffer)
 
 	size = 0;
 	if (buffer)
-		size += ft_strlen(buffer);
+		size += ft_strlen2(buffer);
 	if (temp_buffer)
-		size += ft_strlen(temp_buffer);
-	new_buffer = ft_calloc(size + 1, 1);
+		size += ft_strlen2(temp_buffer);
+	new_buffer = ft_calloc2(size + 1, 1);
 	if (!new_buffer)
 		return (small_clean(&buffer));
 	i = 0;

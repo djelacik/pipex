@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 15:18:22 by djelacik          #+#    #+#             */
-/*   Updated: 2024/05/22 15:54:03 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/07/04 13:48:28 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static char	*clean_buffer(char *buffer)
 		free(buffer);
 		return (NULL);
 	}
-	new = ft_calloc(ft_strlen(buffer + i) + 1, 1);
+	new = ft_calloc2(ft_strlen2(buffer + i) + 1, 1);
 	if (!new)
 	{
 		free(buffer);
@@ -46,7 +46,7 @@ static char	*read_to_buffer(int fd, char *buffer)
 	char	*temp_buffer;
 	int		bytes_read;
 
-	temp_buffer = ft_calloc(BUFFER_SIZE + 1, 1);
+	temp_buffer = ft_calloc2(BUFFER_SIZE + 1, 1);
 	if (!temp_buffer)
 		return (small_clean(&buffer));
 	bytes_read = 1;
@@ -61,7 +61,7 @@ static char	*read_to_buffer(int fd, char *buffer)
 		buffer = ft_strjoin_free(buffer, temp_buffer);
 		if (!buffer)
 			return (small_clean(&temp_buffer));
-		if (ft_strchr(buffer, '\n'))
+		if (ft_strchr2(buffer, '\n'))
 			break ;
 	}
 	free(temp_buffer);
@@ -80,7 +80,7 @@ static char	*extract_line(char **buffer)
 	new_line_flag = 0;
 	if ((*buffer)[i] == '\n')
 		new_line_flag = 1;
-	line = ft_calloc(i + new_line_flag + 1, 1);
+	line = ft_calloc2(i + new_line_flag + 1, 1);
 	if (!line)
 		return (NULL);
 	i = 0;

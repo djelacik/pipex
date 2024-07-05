@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 15:25:47 by djelacik          #+#    #+#             */
-/*   Updated: 2024/07/02 14:47:34 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/07/05 16:17:04 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 
 typedef	struct s_pipex
 {
-	pid_t	pid;
+	pid_t	*pid;
 	pid_t	pid1;
 	pid_t	pid2;
 	int		pipe_count;
@@ -41,12 +41,12 @@ typedef	struct s_pipex
 	char	**envp;
 }t_pipex;
 
-#define DBG_PRINT_FD
+//#define DBG_PRINT_FD
 
 #ifdef DBG_PRINT_FD
 #define dbg_printf(...) fprintf(stderr, __VA_ARGS__)
 #else
-//define dbg_printf(...)
+#define dbg_printf(...)
 #endif
 
 # define ERR_INFILE "Infile"
@@ -82,4 +82,6 @@ void	child_read(int i, char *command, t_pipex *pipex);
 void	child_middle(int i, char *command, t_pipex *pipex);
 void	child_write(int i, char *command, t_pipex *pipex);
 void	here_doc(char *limiter, t_pipex *pipex);
+int		ft_waitpid(pid_t pid);
+int		wait_children(t_pipex *pipex);
 #endif
