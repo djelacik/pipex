@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 21:39:26 by djelacik          #+#    #+#             */
-/*   Updated: 2024/07/05 13:41:24 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/07/09 15:52:59 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ void	close_all_pipes(t_pipex *pipex)
 		dbg_printf("Closed pipe: [%d, %d]\n", pipex->pipes[i][0], pipex->pipes[i][1]);
 		i++;
 	}
+	free(pipex->pipes);
 }
 
 void	close_unused_pipes(int current, t_pipex *pipex)
@@ -67,4 +68,30 @@ void	close_unused_pipes(int current, t_pipex *pipex)
 		}
 		i++;
 	}
+}
+
+int	ft_waitpid(pid_t pid)
+{
+	int	status;
+
+	status = 0;
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	return (EXIT_FAILURE);
+}
+
+int	wait_children(t_pipex *pipex)
+{
+	int	i;
+	int	exit;
+
+	i = 0;
+	while(i < pipex->argc - 3)
+	{
+		exit = ft_waitpid(pipex->pid[i]);
+		i++;
+	}
+	free(pipex->pid);
+	return (exit);
 }

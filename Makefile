@@ -6,12 +6,12 @@
 #    By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/18 11:59:53 by djelacik          #+#    #+#              #
-#    Updated: 2024/07/04 15:42:53 by djelacik         ###   ########.fr        #
+#    Updated: 2024/07/09 11:25:07 by djelacik         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC          = cc
-CFLAGS      = -Wall -Wextra -Werror -g
+CFLAGS      = -Wall -Wextra -Werror
 
 NAME        = pipex
 SOURCES     = pipex.c pipex_utils.c pipex_utils2.c

@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 12:45:06 by djelacik          #+#    #+#             */
-/*   Updated: 2024/07/05 16:20:46 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/07/09 15:07:47 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,16 @@ int main(int argc, char **argv, char **envp)
 		dbg_printf("Opened infile: %d\n", pipex.in_file);
 	}
 	pipex.out_file = 0;
-	dbg_printf("Argv that is opened as outfile: %s\n", pipex.argv[pipex.argc - 1 + pipex.here_doc]);
+	//dbg_printf("Argv that is opened as outfile: %s\n", pipex.argv[pipex.argc - 1 + pipex.here_doc]);
 	pipex.out_file = open(pipex.argv[pipex.argc - 1 + pipex.here_doc], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (pipex.out_file < 0)
 		error_msg(ERR_OUTFILE);
 	dbg_printf("Opened outfile: %d\n", pipex.out_file);
 	start_process(&pipex);
-	dbg_printf("This is a test");
-	return(EXIT_SUCCESS);
+	pipex.exit_code = 0;
+	pipex.exit_code = wait_children(&pipex);
+	dbg_printf("Returning with exit code: %d\n", pipex.exit_code);
+	return(pipex.exit_code);
 }
 
 void	here_doc(char *limiter, t_pipex *pipex)
@@ -83,7 +85,7 @@ void	start_process(t_pipex *pipex)
 	{
 		if ((pipex->pid[i] = fork()) < 0)
 			error_msg(ERR_FORK);
-		if (pipex->pid == 0)
+		if (pipex->pid[i] == 0)
 		{
 			dbg_printf("\nChild process %d started\n", i);
 			close_unused_pipes(i, pipex);
@@ -97,7 +99,7 @@ void	start_process(t_pipex *pipex)
 		i++;
 	}
 	close_all_pipes(pipex);
-	exit(wait_children(pipex));
+	//exit(wait_children(pipex));
 }
 
 void	child_read(int i, char *command, t_pipex *pipex)

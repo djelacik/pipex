@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 21:04:07 by djelacik          #+#    #+#             */
-/*   Updated: 2024/07/05 16:20:54 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/07/09 15:07:01 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,34 +47,10 @@ int main(int argc, char **argv, char **envp)
 		error_msg(ERR_OUTFILE);
 	dbg_printf("Opened outfile: %d\n", pipex.out_file);
 	start_process(&pipex);
-	free(pipex.pipes);
-	dbg_printf("Hello");
-	return(EXIT_FAILURE);
-}
-
-int	ft_waitpid(pid_t pid)
-{
-	int	status;
-
-	status = 0;
-	waitpid(pid, &status, 0);
-	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
-	return (EXIT_FAILURE);
-}
-
-int	wait_children(t_pipex *pipex)
-{
-	int	i;
-	int	exit;
-
-	i = 0;
-	while(i < pipex->argc - 3)
-	{
-		exit = ft_waitpid(pipex->pid[i]);
-		i++;
-	}
-	return (exit);
+	pipex.exit_code = 0;
+	pipex.exit_code = wait_children(&pipex);
+	dbg_printf("Returning with exit code: %d\n", pipex.exit_code);
+	return(pipex.exit_code);
 }
 
 void	here_doc(char *limiter, t_pipex *pipex)
@@ -114,7 +90,7 @@ void	start_process(t_pipex *pipex)
 	{
 		if ((pipex->pid[i] = fork()) < 0)
 			error_msg(ERR_FORK);
-		if (pipex->pid == 0)
+		if (pipex->pid[i] == 0)
 		{
 			dbg_printf("\nChild process %d started\n", i);
 			close_unused_pipes(i, pipex);

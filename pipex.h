@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 15:25:47 by djelacik          #+#    #+#             */
-/*   Updated: 2024/07/05 16:17:04 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/07/09 15:08:37 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ typedef	struct s_pipex
 	int		out_file;
 	int		pipe_fd[2];
 	int		**pipes;
+	int		exit_code;
 	int		here_doc;
 	/*~~~path vars~~~*/
 	char	**paths;
