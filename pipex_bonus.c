@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 21:04:07 by djelacik          #+#    #+#             */
-/*   Updated: 2024/07/23 12:20:16 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/07/23 16:02:39 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,6 @@ void	child_read(int i, char *command, t_pipex *pipex)
 		perror("dup2 failed");
 		exit(EXIT_FAILURE);
 	}
-	dbg_printf("Dup2(%d, %d)\n", pipex->in_file, STDIN_FILENO);
 	dup2(pipex->pipes[i][1], STDOUT_FILENO);
 	dbg_printf("Dup2(%d, %d)\n", pipex->pipes[i][1], STDOUT_FILENO);
 	close(pipex->pipes[i][1]);
