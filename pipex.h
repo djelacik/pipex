@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 15:25:47 by djelacik          #+#    #+#             */
-/*   Updated: 2024/07/09 15:08:37 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/07/23 12:19:40 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,4 +85,5 @@ void	child_write(int i, char *command, t_pipex *pipex);
 void	here_doc(char *limiter, t_pipex *pipex);
 int		ft_waitpid(pid_t pid);
 int		wait_children(t_pipex *pipex);
+void	start_here_doc(t_pipex *pipex);
 #endif

@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 12:45:06 by djelacik          #+#    #+#             */
-/*   Updated: 2024/07/09 15:07:47 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/07/23 12:25:53 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,33 +73,6 @@ void	here_doc(char *limiter, t_pipex *pipex)
 	pipex->in_file = open("infile_here_doc", O_RDONLY);
 	if (pipex->in_file < 0)
 		error_msg(ERR_INFILE);
-}
-
-void	start_process(t_pipex *pipex)
-{
-	int	i;
-
-	i = 0;
-	pipex->pid = malloc(sizeof(pid_t) * pipex->argc - 3);
-	while (i < pipex->argc - 3)
-	{
-		if ((pipex->pid[i] = fork()) < 0)
-			error_msg(ERR_FORK);
-		if (pipex->pid[i] == 0)
-		{
-			dbg_printf("\nChild process %d started\n", i);
-			close_unused_pipes(i, pipex);
-			if (i == 0)
-				child_read(i, pipex->argv[2 + pipex->here_doc], pipex);
-			else if (i == pipex->argc - 4)
-				child_write(i, pipex->argv[pipex->argc - 2 + pipex->here_doc], pipex);
-			else
-				child_middle(i, pipex->argv[i + 2 + pipex->here_doc], pipex);
-		}
-		i++;
-	}
-	close_all_pipes(pipex);
-	//exit(wait_children(pipex));
 }
 
 void	child_read(int i, char *command, t_pipex *pipex)

@@ -6,18 +6,18 @@
 #    By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/18 11:59:53 by djelacik          #+#    #+#              #
-#    Updated: 2024/07/09 11:25:07 by djelacik         ###   ########.fr        #
+#    Updated: 2024/07/23 12:09:33 by djelacik         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC          = cc
-CFLAGS      = -Wall -Wextra -Werror
+CFLAGS      = -Wall -Wextra -Werror -g
 
 NAME        = pipex
-SOURCES     = pipex.c pipex_utils.c pipex_utils2.c
+SOURCES     = pipex.c pipex_utils.c handle_pipes.c start_process.c
 OBJECTS     = ${SOURCES:.c=.o}
 
-B_SOURCES   = pipex_bonus.c pipex_utils.c pipex_utils2.c
+B_SOURCES   = pipex_bonus.c pipex_utils.c handle_pipes.c start_process.c
 B_OBJECTS   = ${B_SOURCES:.c=.o}
 
 %.o: %.c
