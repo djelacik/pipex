@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex_utils2.c                                     :+:      :+:    :+:   */
+/*   handle_pipes.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 21:39:26 by djelacik          #+#    #+#             */
-/*   Updated: 2024/07/09 15:52:59 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/07/23 16:11:52 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	create_pipes(t_pipex *pipex)
 {
 	int	i;
-	
+
 	pipex->pipes = malloc((pipex->argc - 4) * sizeof(int *));
 	if (!pipex->pipes)
 		error_msg(ERR_MALLOC);
@@ -28,7 +28,6 @@ void	create_pipes(t_pipex *pipex)
 			error_msg(ERR_MALLOC);
 		if (pipe(pipex->pipes[i]) < 0)
 			error_msg(ERR_PIPE);
-		dbg_printf("Created pipe: [%d, %d]\n", pipex->pipes[i][0], pipex->pipes[i][1]);
 		i++;
 	}
 }
@@ -43,7 +42,6 @@ void	close_all_pipes(t_pipex *pipex)
 		close(pipex->pipes[i][0]);
 		close(pipex->pipes[i][1]);
 		free(pipex->pipes[i]);
-		dbg_printf("Closed pipe: [%d, %d]\n", pipex->pipes[i][0], pipex->pipes[i][1]);
 		i++;
 	}
 	free(pipex->pipes);
@@ -59,12 +57,10 @@ void	close_unused_pipes(int current, t_pipex *pipex)
 		if (i != current && pipex->pipes[i][1] > STDERR_FILENO)
 		{
 			close(pipex->pipes[i][1]);
-			dbg_printf("Closed unused pipe write end in %d process: [%d]\n", current, pipex->pipes[i][1]);
 		}
 		if (i != current - 1 && pipex->pipes[i][0] > STDERR_FILENO)
 		{
 			close(pipex->pipes[i][0]);
-			dbg_printf("Closed unused pipe read  end in %d process: [%d]\n",current, pipex->pipes[i][0]);
 		}
 		i++;
 	}
@@ -87,7 +83,7 @@ int	wait_children(t_pipex *pipex)
 	int	exit;
 
 	i = 0;
-	while(i < pipex->argc - 3)
+	while (i < pipex->argc - 3)
 	{
 		exit = ft_waitpid(pipex->pid[i]);
 		i++;

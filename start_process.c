@@ -6,37 +6,37 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 12:08:28 by djelacik          #+#    #+#             */
-/*   Updated: 2024/07/23 12:19:16 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/07/23 16:52:35 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	start_process(t_pipex *pipex)
+void	start_process(t_pipex *pp)
 {
 	int	i;
 
 	i = 0;
-	pipex->pid = malloc(sizeof(pid_t) * pipex->argc - 3);
-	while (i < pipex->argc - 3)
+	pp->pid = malloc(sizeof(pid_t) * pp->argc - 3);
+	while (i < pp->argc - 3)
 	{
-		if ((pipex->pid[i] = fork()) < 0)
+		pp->pid[i] = fork();
+		if (pp->pid[i] < 0)
 			error_msg(ERR_FORK);
-		if (pipex->pid[i] == 0)
+		if (pp->pid[i] == 0)
 		{
-			dbg_printf("\nChild process %d started\n", i);
-			close_unused_pipes(i, pipex);
+			close_unused_pipes(i, pp);
 			if (i == 0)
-				child_read(i, pipex->argv[2 + pipex->here_doc], pipex);
-			else if (i == pipex->argc - 4)
-				child_write(i, pipex->argv[pipex->argc - 2 + pipex->here_doc], pipex);
+				child_read(i, pp->argv[2 + pp->here_doc], pp);
+			else if (i == pp->argc - 4)
+				child_write(i, pp->argv[pp->argc - 2 + pp->here_doc], pp);
 			else
-				child_middle(i, pipex->argv[i + 2 + pipex->here_doc], pipex);
+				child_middle(i, pp->argv[i + 2 + pp->here_doc], pp);
 		}
 		i++;
 	}
-	close_all_pipes(pipex);
-	exit(wait_children(pipex));
+	close_all_pipes(pp);
+	exit(wait_children(pp));
 }
 
 void	start_here_doc(t_pipex *pipex)

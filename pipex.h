@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 15:25:47 by djelacik          #+#    #+#             */
-/*   Updated: 2024/07/23 12:19:40 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/07/23 16:34:23 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include "libft/libft.h"
 # include "get_next_line/get_next_line.h"
 
-typedef	struct s_pipex
+typedef struct s_pipex
 {
 	pid_t	*pid;
 	pid_t	pid1;
@@ -33,22 +33,12 @@ typedef	struct s_pipex
 	int		**pipes;
 	int		exit_code;
 	int		here_doc;
-	/*~~~path vars~~~*/
 	char	**paths;
 	char	**cmds;
-	/*~~~main args/~~~*/
 	int		argc;
 	char	**argv;
 	char	**envp;
 }t_pipex;
-
-//#define DBG_PRINT_FD
-
-#ifdef DBG_PRINT_FD
-#define dbg_printf(...) fprintf(stderr, __VA_ARGS__)
-#else
-#define dbg_printf(...)
-#endif
 
 # define ERR_INFILE "Infile"
 # define ERR_OUTFILE "Outfile"
@@ -64,7 +54,6 @@ typedef	struct s_pipex
 # define ERR_CHILD_MIDDLE "Child_middle"
 # define ERR_PATH "Path"
 # define ERR_MALLOC "Malloc"
-
 //Function prototypes
 void	first_child(char **argv, t_pipex *pipex);
 void	second_child(char **argv, t_pipex *pipex);
@@ -73,7 +62,6 @@ char	*find_path(char *command, t_pipex *pipex);
 void	execute_command(char *command, t_pipex *pipex);
 void	error_msg(const char *msg);
 void	ft_free_strarray(char **array);
-
 //Bonus Function prototypes
 void	create_pipes(t_pipex *pipex);
 void	close_unused_pipes(int current, t_pipex *pipex);
