@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 12:08:28 by djelacik          #+#    #+#             */
-/*   Updated: 2024/07/23 16:52:35 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/07/25 11:04:41 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	start_process(t_pipex *pp)
 	{
 		pp->pid[i] = fork();
 		if (pp->pid[i] < 0)
-			error_msg(ERR_FORK);
+			error_msg(ERR_FORK, pp);
 		if (pp->pid[i] == 0)
 		{
 			close_unused_pipes(i, pp);

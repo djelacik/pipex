@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 15:25:47 by djelacik          #+#    #+#             */
-/*   Updated: 2024/07/23 16:34:23 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/07/25 16:50:02 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	second_child(char **argv, t_pipex *pipex);
 void	parent_process(char **argv, t_pipex *pipex);
 char	*find_path(char *command, t_pipex *pipex);
 void	execute_command(char *command, t_pipex *pipex);
-void	error_msg(const char *msg);
+void	error_msg(const char *msg, t_pipex *pipex);
 void	ft_free_strarray(char **array);
 //Bonus Function prototypes
 void	create_pipes(t_pipex *pipex);

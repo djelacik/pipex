@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 21:39:26 by djelacik          #+#    #+#             */
-/*   Updated: 2024/07/23 16:11:52 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/07/25 15:46:54 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,16 @@ void	create_pipes(t_pipex *pipex)
 
 	pipex->pipes = malloc((pipex->argc - 4) * sizeof(int *));
 	if (!pipex->pipes)
-		error_msg(ERR_MALLOC);
+		error_msg(ERR_MALLOC, pipex);
 	pipex->pipe_count = pipex->argc - 4;
 	i = 0;
 	while (i < pipex->pipe_count)
 	{
 		pipex->pipes[i] = malloc(2 * sizeof(int));
 		if (!pipex->pipes[i])
-			error_msg(ERR_MALLOC);
+			error_msg(ERR_MALLOC, pipex);
 		if (pipe(pipex->pipes[i]) < 0)
-			error_msg(ERR_PIPE);
+			error_msg(ERR_PIPE, pipex);
 		i++;
 	}
 }
@@ -89,5 +89,7 @@ int	wait_children(t_pipex *pipex)
 		i++;
 	}
 	free(pipex->pid);
+	if (pipex->out_file < 0)
+		return (EXIT_FAILURE);
 	return (exit);
 }

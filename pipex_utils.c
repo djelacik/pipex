@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 21:29:04 by djelacik          #+#    #+#             */
-/*   Updated: 2024/07/23 17:47:21 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/07/25 16:55:24 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ char	*find_path(char *command, t_pipex *pp)
 		i++;
 	if (pp->envp[i] == NULL)
 	{
-		perror(ERR_PATH);
+	//	perror(ERR_PATH);
+	//command not found
 		exit(127);
 	}
 	pp->paths = ft_split(pp->envp[i] + 5, ':');
@@ -47,20 +48,28 @@ void	execute_command(char *command, t_pipex *pipex)
 	char	**commands;
 
 	commands = ft_split(command, ' ');
-	full_path = find_path(commands[0], pipex);
+	if (!ft_strchr(command, '/'))
+		full_path = find_path(commands[0], pipex);
+	else
+		full_path = command;
 	if (full_path == NULL)
 	{
 		perror(ERR_CMD);
-		exit(126);
+		ft_free_strarray(commands);
+		close_all_pipes(pipex);
+		free(pipex->pid);
+		exit(127);
 	}
 	execve(full_path, commands, pipex->envp);
 	ft_free_strarray(commands);
-	error_msg(ERR_EXECVE);
+	error_msg(ERR_EXECVE, pipex);
 }
 
-void	error_msg(const char *msg)
+void	error_msg(const char *msg, t_pipex *pipex)
 {
 	perror(msg);
+	(void)pipex;
+	close_all_pipes(pipex);
 	exit(EXIT_FAILURE);
 }
 

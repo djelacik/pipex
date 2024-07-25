@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 21:04:07 by djelacik          #+#    #+#             */
-/*   Updated: 2024/07/23 16:33:32 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/07/25 15:58:54 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	main(int argc, char **argv, char **envp)
 	t_pipex	pipex;
 
 	if (argc < 5)
-		error_msg(ERR_ARGS);
+		return (EXIT_FAILURE);
 	ft_bzero(&pipex, sizeof(pipex));
 	pipex.argc = argc;
 	pipex.argv = argv;
@@ -34,7 +34,7 @@ int	main(int argc, char **argv, char **envp)
 	pipex.out_file = open(pipex.argv[pipex.argc - 1 + pipex.here_doc],
 			O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (pipex.out_file < 0)
-		error_msg(ERR_OUTFILE);
+		perror(ERR_OUTFILE);
 	start_process(&pipex);
 	pipex.exit_code = wait_children(&pipex);
 	return (pipex.exit_code);
@@ -79,7 +79,7 @@ void	child_read(int i, char *command, t_pipex *pipex)
 	close(pipex->pipes[i][0]);
 	close(pipex->in_file);
 	execute_command(command, pipex);
-	error_msg(ERR_CHILD_WRITE);
+	error_msg(ERR_CHILD_WRITE, pipex);
 }
 
 void	child_middle(int i, char *command, t_pipex *pipex)
@@ -91,7 +91,7 @@ void	child_middle(int i, char *command, t_pipex *pipex)
 	close(pipex->pipes[i][1]);
 	close(pipex->pipes[i][0]);
 	execute_command(command, pipex);
-	error_msg(ERR_CHILD_MIDDLE);
+	error_msg(ERR_CHILD_MIDDLE, pipex);
 }
 
 void	child_write(int i, char *command, t_pipex *pipex)
@@ -102,5 +102,5 @@ void	child_write(int i, char *command, t_pipex *pipex)
 	dup2(pipex->out_file, STDOUT_FILENO);
 	close(pipex->out_file);
 	execute_command(command, pipex);
-	error_msg(ERR_CHILD_WRITE);
+	error_msg(ERR_CHILD_WRITE, pipex);
 }
