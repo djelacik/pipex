@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 12:08:28 by djelacik          #+#    #+#             */
-/*   Updated: 2024/07/25 11:04:41 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/08/19 14:30:06 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	start_process(t_pipex *pp)
 	int	i;
 
 	i = 0;
-	pp->pid = malloc(sizeof(pid_t) * pp->argc - 3);
+	pp->pid = malloc(sizeof(pid_t) * (pp->argc - 3));
 	while (i < pp->argc - 3)
 	{
 		pp->pid[i] = fork();
