@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 21:39:26 by djelacik          #+#    #+#             */
-/*   Updated: 2024/08/19 16:09:41 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/08/19 16:49:11 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ void	close_unused_pipes(int current, t_pipex *pipex)
 		}
 		i++;
 	}
+	free(pipex->pid);
 }
 
 int	ft_waitpid(pid_t pid)
