@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 21:39:26 by djelacik          #+#    #+#             */
-/*   Updated: 2024/07/25 15:46:54 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/08/19 14:36:49 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ int	wait_children(t_pipex *pipex)
 		i++;
 	}
 	free(pipex->pid);
+	pipex->pid = NULL;
 	if (pipex->out_file < 0)
 		return (EXIT_FAILURE);
 	return (exit);
