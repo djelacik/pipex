@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 15:25:47 by djelacik          #+#    #+#             */
-/*   Updated: 2024/07/25 16:50:02 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/08/19 15:10:22 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # include <sys/wait.h>
 # include "libft/libft.h"
 # include "get_next_line/get_next_line.h"
+
+
 
 typedef struct s_pipex
 {
