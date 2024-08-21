@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 15:25:47 by djelacik          #+#    #+#             */
-/*   Updated: 2024/08/19 15:10:22 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/08/21 13:13:55 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@
 # include <sys/wait.h>
 # include "libft/libft.h"
 # include "get_next_line/get_next_line.h"
-
-
 
 typedef struct s_pipex
 {
@@ -40,7 +38,7 @@ typedef struct s_pipex
 	int		argc;
 	char	**argv;
 	char	**envp;
-}t_pipex;
+}	t_pipex;
 
 # define ERR_INFILE "Infile"
 # define ERR_OUTFILE "Outfile"

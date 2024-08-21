@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 21:04:07 by djelacik          #+#    #+#             */
-/*   Updated: 2024/08/19 17:16:37 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/08/21 13:09:59 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,9 @@ void	child_read(int i, char *command, t_pipex *pipex)
 {
 	if (dup2(pipex->in_file, STDIN_FILENO) < 0)
 	{
-		perror("dup2 failed");
 		close(pipex->pipes[i][1]);
 		close(pipex->pipes[i][0]);
+		close_all_pipes(pipex);
 		exit(EXIT_FAILURE);
 	}
 	dup2(pipex->pipes[i][1], STDOUT_FILENO);
