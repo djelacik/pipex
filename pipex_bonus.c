@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 21:04:07 by djelacik          #+#    #+#             */
-/*   Updated: 2024/08/21 13:09:59 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/08/22 14:28:08 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,11 @@ void	child_write(int i, char *command, t_pipex *pipex)
 	close(pipex->pipes[i - 1][1]);
 	dup2(pipex->pipes[i - 1][0], STDIN_FILENO);
 	close(pipex->pipes[i - 1][0]);
-	dup2(pipex->out_file, STDOUT_FILENO);
+	if (dup2(pipex->out_file, STDOUT_FILENO) < 0)
+	{
+		close_all_pipes(pipex);
+		exit (EXIT_FAILURE);
+	}
 	close(pipex->out_file);
 	execute_command(command, pipex);
 	error_msg(ERR_CHILD_WRITE, pipex);
